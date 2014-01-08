@@ -1,0 +1,18 @@
+{
+    "name": "centraldesktop/avro-php",
+    "description": "Composer packaging for vanilla Apache Avro",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Trey Hyde",
+            "email": "thyde@centraldesktop.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "classmap": ["lib/"]
+       
+    }
+}
