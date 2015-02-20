@@ -165,7 +165,7 @@ class AvroDataIO
    * @param AvroSchema $schema
    * @returns AvroDataIOWriter
    */
-  protected function open_writer($io, $schema)
+  protected static function open_writer($io, $schema)
   {
     $writer = new AvroIODatumWriter($schema);
     return new AvroDataIOWriter($io, $writer, $schema);
@@ -176,7 +176,7 @@ class AvroDataIO
    * @param AvroSchema $schema
    * @returns AvroDataIOReader
    */
-  protected function open_reader($io, $schema)
+  protected static function open_reader($io, $schema)
   {
     $reader = new AvroIODatumReader(null, $schema);
     return new AvroDataIOReader($io, $reader);
@@ -278,28 +278,30 @@ class AvroDataIOReader
 
   /**
    * @internal Would be nice to implement data() as an iterator, I think
-   * @returns array of data from object container.
+   * @returns \Generator
    */
   public function data()
   {
-    $data = array();
     while (true)
     {
       if (0 == $this->block_count)
       {
-        if ($this->is_eof())
+        if ($this->is_eof()) {
           break;
+        }
 
-        if ($this->skip_sync())
-          if ($this->is_eof())
+        if ($this->skip_sync()) {
+          if ($this->is_eof()) {
             break;
+          }
+        }
 
         $this->read_block_header();
       }
-      $data []= $this->datum_reader->read($this->decoder);
+      $data = $this->datum_reader->read($this->decoder);
       $this->block_count -= 1;
+      yield $data;
     }
-    return $data;
   }
 
   /**
