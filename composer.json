@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": "~5.5"
+        "php": ">=5.5.0",
+        "ext-gmp": "*"
     },
     "autoload": {
         "classmap": ["lib/"]
