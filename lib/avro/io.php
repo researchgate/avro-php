@@ -202,8 +202,10 @@ class AvroStringIO extends AvroIO
   {
     $this->check_closed();
     $read='';
-    for($i=$this->current_index; $i<($this->current_index+$len); $i++) 
+    for($i=$this->current_index; $i<($this->current_index+$len); $i++){
+      if(!isset($this->string_buffer[$i])) continue;
       $read .= $this->string_buffer[$i];
+    }
     if (strlen($read) < $len)
       $this->current_index = $this->length();
     else
