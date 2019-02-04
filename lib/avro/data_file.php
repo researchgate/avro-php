@@ -86,19 +86,19 @@ class AvroDataIO
   private static $metadata_schema;
 
   /**
-   * @returns the initial "magic" segment of an Avro container file header.
+   * @return string the initial "magic" segment of an Avro container file header.
    */
   public static function magic() { return ('Obj' . pack('c', self::VERSION)); }
 
   /**
-   * @returns int count of bytes in the initial "magic" segment of the
+   * @return int count of bytes in the initial "magic" segment of the
    *              Avro container file header
    */
   public static function magic_size() { return strlen(self::magic()); }
 
 
   /**
-   * @returns AvroSchema object of Avro container file metadata.
+   * @return AvroSchema object of Avro container file metadata.
    */
   public static function metadata_schema()
   {
@@ -111,7 +111,7 @@ class AvroDataIO
    * @param string $file_path file_path of file to open
    * @param string $mode one of AvroFile::READ_MODE or AvroFile::WRITE_MODE
    * @param string $schema_json JSON of writer's schema
-   * @returns AvroDataIOWriter instance of AvroDataIOWriter
+   * @return AvroDataIOWriter instance of AvroDataIOWriter
    *
    * @throws AvroDataIOException if $writers_schema is not provided
    *         or if an invalid $mode is given.
@@ -122,7 +122,6 @@ class AvroDataIO
     $schema = !is_null($schema_json)
       ? AvroSchema::parse($schema_json) : null;
 
-    $io = false;
     switch ($mode)
     {
       case AvroFile::WRITE_MODE:
@@ -144,7 +143,7 @@ class AvroDataIO
   }
 
   /**
-   * @returns array array of valid codecs
+   * @return array array of valid codecs
    */
   private static function valid_codecs()
   {
@@ -153,7 +152,7 @@ class AvroDataIO
 
   /**
    * @param string $codec
-   * @returns boolean true if $codec is a valid codec value and false otherwise
+   * @return boolean true if $codec is a valid codec value and false otherwise
    */
   public static function is_valid_codec($codec)
   {
@@ -163,7 +162,7 @@ class AvroDataIO
   /**
    * @param AvroIO $io
    * @param AvroSchema $schema
-   * @returns AvroDataIOWriter
+   * @return AvroDataIOWriter
    */
   protected static function open_writer($io, $schema)
   {
@@ -174,7 +173,7 @@ class AvroDataIO
   /**
    * @param AvroIO $io
    * @param AvroSchema $schema
-   * @returns AvroDataIOReader
+   * @return AvroDataIOReader
    */
   protected static function open_reader($io, $schema)
   {
@@ -209,12 +208,12 @@ class AvroDataIOReader
   /**
    * @var string
    */
-  private $sync_marker;
+  public $sync_marker;
 
   /**
    * @var array object container metadata
    */
-  private $metadata;
+  public $metadata;
 
   /**
    * @var int count of items in block
@@ -278,30 +277,28 @@ class AvroDataIOReader
 
   /**
    * @internal Would be nice to implement data() as an iterator, I think
-   * @returns \Generator
+   * @return array of data from object container.
    */
   public function data()
   {
+    $data = array();
     while (true)
     {
       if (0 == $this->block_count)
       {
-        if ($this->is_eof()) {
+        if ($this->is_eof())
           break;
-        }
 
-        if ($this->skip_sync()) {
-          if ($this->is_eof()) {
+        if ($this->skip_sync())
+          if ($this->is_eof())
             break;
-          }
-        }
 
         $this->read_block_header();
       }
-      $data = $this->datum_reader->read($this->decoder);
+      $data []= $this->datum_reader->read($this->decoder);
       $this->block_count -= 1;
-      yield $data;
     }
+    return $data;
   }
 
   /**
@@ -312,6 +309,10 @@ class AvroDataIOReader
 
   /**
    * @uses AvroIO::seek()
+   * @param $offset
+   * @param $whence
+   * @return bool
+   * @throws AvroNotImplementedException
    */
   private function seek($offset, $whence)
   {
@@ -320,6 +321,9 @@ class AvroDataIOReader
 
   /**
    * @uses AvroIO::read()
+   * @param $len
+   * @return string
+   * @throws AvroNotImplementedException
    */
   private function read($len) { return $this->io->read($len); }
 
@@ -328,6 +332,9 @@ class AvroDataIOReader
    */
   private function is_eof() { return $this->io->is_eof(); }
 
+  /**
+   * @return bool
+   */
   private function skip_sync()
   {
     $proposed_sync_marker = $this->read(AvroDataIO::SYNC_SIZE);
@@ -342,7 +349,7 @@ class AvroDataIOReader
   /**
    * Reads the block header (which includes the count of items in the block
    * and the length in bytes of the block)
-   * @returns int length in bytes of the block.
+   * @return int length in bytes of the block.
    */
   private function read_block_header()
   {
@@ -359,7 +366,7 @@ class AvroDataIOReader
 class AvroDataIOWriter
 {
   /**
-   * @returns string a new, unique sync marker.
+   * @return string a new, unique sync marker.
    */
   private static function generate_sync_marker()
   {
@@ -411,6 +418,7 @@ class AvroDataIOWriter
    * @param AvroIO $io
    * @param AvroIODatumWriter $datum_writer
    * @param AvroSchema $writers_schema
+   * @throws AvroDataIOException
    */
   public function __construct($io, $datum_writer, $writers_schema=null)
   {
@@ -470,7 +478,7 @@ class AvroDataIOWriter
 
   /**
    * Flushes biffer to AvroIO object container.
-   * @returns mixed value of $io->flush()
+   * @return mixed value of $io->flush()
    * @see AvroIO::flush()
    */
   private function flush()
@@ -522,6 +530,7 @@ class AvroDataIOWriter
   /**
    * @param string $bytes
    * @uses AvroIO::write()
+   * @return int
    */
   private function write($bytes) { return $this->io->write($bytes); }
 
@@ -529,6 +538,7 @@ class AvroDataIOWriter
    * @param int $offset
    * @param int $whence
    * @uses AvroIO::seek()
+   * @return bool
    */
   private function seek($offset, $whence)
   {

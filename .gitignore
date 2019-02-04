@@ -1,2 +1,4 @@
 vendor/
-
+composer.lock
+!bin/php
+!build/.gitkeep
