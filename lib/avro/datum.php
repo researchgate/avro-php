@@ -38,8 +38,8 @@ class AvroIOTypeException extends AvroException
    */
   public function __construct($expected_schema, $datum)
   {
-    parent::__construct(sprintf('The datum %s is not an example of schema %s',
-                                var_export($datum, true), $expected_schema));
+    parent::__construct(\sprintf('The datum %s is not an example of schema %s',
+                                \var_export($datum, true), $expected_schema));
   }
 }
 
@@ -58,7 +58,7 @@ class AvroIOSchemaMatchException extends AvroException
   function __construct($writers_schema, $readers_schema)
   {
     parent::__construct(
-      sprintf("Writer's schema %s and Reader's schema %s do not match.",
+      \sprintf("Writer's schema %s and Reader's schema %s do not match.",
               $writers_schema, $readers_schema));
   }
 }
@@ -132,7 +132,7 @@ class AvroIODatumWriter
       case AvroSchema::UNION_SCHEMA:
         return $this->write_union($writers_schema, $datum, $encoder);
       default:
-        throw new AvroException(sprintf('Uknown type: %s',
+        throw new AvroException(\sprintf('Uknown type: %s',
                                         $writers_schema->type));
     }
   }
@@ -153,7 +153,7 @@ class AvroIODatumWriter
    */
   private function write_array($writers_schema, $datum, $encoder)
   {
-    $datum_count = count($datum);
+    $datum_count = \count($datum);
     if (0 < $datum_count)
     {
       $encoder->write_long($datum_count);
@@ -166,7 +166,7 @@ class AvroIODatumWriter
 
   private function write_map($writers_schema, $datum, $encoder)
   {
-    $datum_count = count($datum);
+    $datum_count = \count($datum);
     if ($datum_count > 0)
     {
       $encoder->write_long($datum_count);
@@ -191,7 +191,7 @@ class AvroIODatumWriter
         break;
       }
 
-    if (is_null($datum_schema))
+    if (\is_null($datum_schema))
       throw new AvroIOTypeException($writers_schema, $datum);
 
     $encoder->write_long($datum_schema_index);
@@ -244,7 +244,7 @@ class AvroIOBinaryEncoder
    */
   static function float_to_int_bits($float)
   {
-    return pack('f', (float) $float);
+    return \pack('f', (float) $float);
   }
 
   /**
@@ -258,7 +258,7 @@ class AvroIOBinaryEncoder
    */
   static function double_to_long_bits($double)
   {
-    return pack('d', (double) $double);
+    return \pack('d', (double) $double);
   }
 
   /**
@@ -273,10 +273,10 @@ class AvroIOBinaryEncoder
     $str = '';
     while (0 != ($n & ~0x7F))
     {
-      $str .= chr(($n & 0x7F) | 0x80);
+      $str .= \chr(($n & 0x7F) | 0x80);
       $n >>= 7;
     }
-    $str .= chr($n);
+    $str .= \chr($n);
     return $str;
   }
 
@@ -305,7 +305,7 @@ class AvroIOBinaryEncoder
    */
   function write_boolean($datum)
   {
-    $byte = $datum ? chr(1) : chr(0);
+    $byte = $datum ? \chr(1) : \chr(0);
     $this->write($byte);
   }
 
@@ -354,7 +354,7 @@ class AvroIOBinaryEncoder
    */
   function write_bytes($bytes)
   {
-    $this->write_long(strlen($bytes));
+    $this->write_long(\strlen($bytes));
     $this->write($bytes);
   }
 
@@ -423,13 +423,13 @@ class AvroIODatumReader
       }
 
       if (AvroSchema::INT_TYPE == $writers_schema_type
-          && in_array($readers_schema_type, array(AvroSchema::LONG_TYPE,
+          && \in_array($readers_schema_type, array(AvroSchema::LONG_TYPE,
                                                   AvroSchema::FLOAT_TYPE,
                                                   AvroSchema::DOUBLE_TYPE)))
         return true;
 
       if (AvroSchema::LONG_TYPE == $writers_schema_type
-          && in_array($readers_schema_type, array(AvroSchema::FLOAT_TYPE,
+          && \in_array($readers_schema_type, array(AvroSchema::FLOAT_TYPE,
                                                   AvroSchema::DOUBLE_TYPE)))
         return true;
 
@@ -494,7 +494,7 @@ class AvroIODatumReader
    */
   public function read($decoder)
   {
-    if (is_null($this->readers_schema))
+    if (\is_null($this->readers_schema))
       $this->readers_schema = $this->writers_schema;
     return $this->read_data($this->writers_schema, $this->readers_schema,
                             $decoder);
@@ -556,7 +556,7 @@ class AvroIODatumReader
       case AvroSchema::REQUEST_SCHEMA:
         return $this->read_record($writers_schema, $readers_schema, $decoder);
       default:
-        throw new AvroException(sprintf("Cannot read unknown schema type: %s",
+        throw new AvroException(\sprintf("Cannot read unknown schema type: %s",
                                         $writers_schema->type()));
     }
   }
@@ -661,7 +661,7 @@ class AvroIODatumReader
         $this->skip_data($type, $decoder);
     }
     // Fill in default values
-    if (count($readers_fields) > count($record))
+    if (\count($readers_fields) > \count($record))
     {
       $writers_fields = $writers_schema->fields_hash();
       foreach ($readers_fields as $field_name => $field)
@@ -739,7 +739,7 @@ class AvroIODatumReader
         }
         return $record;
     default:
-      throw new AvroException(sprintf('Unknown type: %s', $field_schema->type()));
+      throw new AvroException(\sprintf('Unknown type: %s', $field_schema->type()));
     }
   }
 
@@ -782,7 +782,7 @@ class AvroIODatumReader
       case AvroSchema::REQUEST_SCHEMA:
         return $decoder->skip_record($writers_schema, $decoder);
       default:
-        throw new AvroException(sprintf('Uknown schema type: %s',
+        throw new AvroException(\sprintf('Uknown schema type: %s',
                                         $writers_schema->type()));
     }
   }
@@ -804,12 +804,12 @@ class AvroIOBinaryDecoder
    */
   public static function decode_long_from_array($bytes)
   {
-    $b = array_shift($bytes);
+    $b = \array_shift($bytes);
     $n = $b & 0x7f;
     $shift = 7;
     while (0 != ($b & 0x80))
     {
-      $b = array_shift($bytes);
+      $b = \array_shift($bytes);
       $n |= (($b & 0x7f) << $shift);
       $shift += 7;
     }
@@ -827,7 +827,7 @@ class AvroIOBinaryDecoder
    */
   static public function int_bits_to_float($bits)
   {
-    $float = unpack('f', $bits);
+    $float = \unpack('f', $bits);
     return (float) $float[1];
   }
 
@@ -842,7 +842,7 @@ class AvroIOBinaryDecoder
    */
   static public function long_bits_to_double($bits)
   {
-    $double = unpack('d', $bits);
+    $double = \unpack('d', $bits);
     return (double) $double[1];
   }
 
@@ -876,7 +876,7 @@ class AvroIOBinaryDecoder
    */
   public function read_boolean()
   {
-    return (boolean) (1 == ord($this->next_byte()));
+    return (boolean) (1 == \ord($this->next_byte()));
   }
 
   /**
@@ -889,11 +889,11 @@ class AvroIOBinaryDecoder
    */
   public function read_long()
   {
-    $byte = ord($this->next_byte());
+    $byte = \ord($this->next_byte());
     $bytes = array($byte);
     while (0 != ($byte & 0x80))
     {
-      $byte = ord($this->next_byte());
+      $byte = \ord($this->next_byte());
       $bytes []= $byte;
     }
 

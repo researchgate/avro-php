@@ -193,10 +193,10 @@ class AvroGMP {
     $bytes = '';
     while (0 != gmp_cmp(self::gmp_0(), gmp_and($g, self::gmp_n0x7f())))
     {
-      $bytes .= chr(gmp_intval(gmp_and($g, self::gmp_0x7f())) | 0x80);
+      $bytes .= \chr(gmp_intval(gmp_and($g, self::gmp_0x7f())) | 0x80);
       $g = self::shift_right($g, 7);
     }
-    $bytes .= chr(gmp_intval($g));
+    $bytes .= \chr(gmp_intval($g));
     return $bytes;
   }
 
@@ -206,12 +206,12 @@ class AvroGMP {
    */
   static function decode_long_from_array($bytes)
   {
-    $b = array_shift($bytes);
+    $b = \array_shift($bytes);
     $g = gmp_init($b & 0x7f);
     $shift = 7;
     while (0 != ($b & 0x80))
     {
-      $b = array_shift($bytes);
+      $b = \array_shift($bytes);
       $g = gmp_or($g, self::shift_left(($b & 0x7f), $shift));
       $shift += 7;
     }

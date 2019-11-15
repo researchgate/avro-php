@@ -40,7 +40,7 @@ class AvroUtil
    */
   static function is_list($ary)
   {
-    if (is_array($ary))
+    if (\is_array($ary))
     {
       $i = 0;
       foreach ($ary as $k => $v)

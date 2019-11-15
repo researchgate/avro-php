@@ -102,7 +102,7 @@ class Avro
   private static function check_64_bit()
   {
     if (8 != PHP_INT_SIZE)
-      if (extension_loaded('gmp'))
+      if (\extension_loaded('gmp'))
         self::$biginteger_mode = self::GMP_BIGINTEGER_MODE;
       else
         throw new AvroException('This platform cannot handle a 64-bit operations. '
@@ -144,7 +144,7 @@ class Avro
    */
   private static function set_endianness()
   {
-    $packed = pack('d', 1);
+    $packed = \pack('d', 1);
     switch ($packed)
     {
       case "\77\360\0\0\0\0\0\0":
@@ -155,7 +155,7 @@ class Avro
         break;
       default:
         throw new AvroException(
-          sprintf('Error determining platform endianness: %s',
+          \sprintf('Error determining platform endianness: %s',
                   AvroDebug::hex_string($packed)));
     }
   }
@@ -167,7 +167,7 @@ class Avro
    */
   private static function is_big_endian_platform()
   {
-    if (is_null(self::$endianness))
+    if (\is_null(self::$endianness))
       self::set_endianness();
 
     return (self::BIG_ENDIAN == self::$endianness);

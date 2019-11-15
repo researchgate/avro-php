@@ -88,13 +88,13 @@ class AvroDataIO
   /**
    * @returns the initial "magic" segment of an Avro container file header.
    */
-  public static function magic() { return ('Obj' . pack('c', self::VERSION)); }
+  public static function magic() { return ('Obj' . \pack('c', self::VERSION)); }
 
   /**
    * @returns int count of bytes in the initial "magic" segment of the
    *              Avro container file header
    */
-  public static function magic_size() { return strlen(self::magic()); }
+  public static function magic_size() { return \strlen(self::magic()); }
 
 
   /**
@@ -102,7 +102,7 @@ class AvroDataIO
    */
   public static function metadata_schema()
   {
-    if (is_null(self::$metadata_schema))
+    if (\is_null(self::$metadata_schema))
       self::$metadata_schema = AvroSchema::parse(self::METADATA_SCHEMA_JSON);
     return self::$metadata_schema;
   }
@@ -119,14 +119,14 @@ class AvroDataIO
   public static function open_file($file_path, $mode=AvroFile::READ_MODE,
                                    $schema_json=null)
   {
-    $schema = !is_null($schema_json)
+    $schema = !\is_null($schema_json)
       ? AvroSchema::parse($schema_json) : null;
 
     $io = false;
     switch ($mode)
     {
       case AvroFile::WRITE_MODE:
-        if (is_null($schema))
+        if (\is_null($schema))
           throw new AvroDataIOException('Writing an Avro file requires a schema.');
         $file = new AvroFile($file_path, AvroFile::WRITE_MODE);
         $io = self::open_writer($file, $schema);
@@ -137,7 +137,7 @@ class AvroDataIO
         break;
       default:
         throw new AvroDataIOException(
-          sprintf("Only modes '%s' and '%s' allowed. You gave '%s'.",
+          \sprintf("Only modes '%s' and '%s' allowed. You gave '%s'.",
                   AvroFile::READ_MODE, AvroFile::WRITE_MODE, $mode));
     }
     return $io;
@@ -157,7 +157,7 @@ class AvroDataIO
    */
   public static function is_valid_codec($codec)
   {
-    return in_array($codec, self::valid_codecs());
+    return \in_array($codec, self::valid_codecs());
   }
 
   /**
@@ -242,7 +242,7 @@ class AvroDataIOReader
     $codec = AvroUtil::array_value($this->metadata, 
                                    AvroDataIO::METADATA_CODEC_ATTR);
     if ($codec && !AvroDataIO::is_valid_codec($codec))
-      throw new AvroDataIOException(sprintf('Uknown codec: %s', $codec));
+      throw new AvroDataIOException(\sprintf('Uknown codec: %s', $codec));
 
     $this->block_count = 0;
     // FIXME: Seems unsanitary to set writers_schema here.
@@ -261,13 +261,13 @@ class AvroDataIOReader
 
     $magic = $this->read(AvroDataIO::magic_size());
 
-    if (strlen($magic) < AvroDataIO::magic_size())
+    if (\strlen($magic) < AvroDataIO::magic_size())
       throw new AvroDataIOException(
         'Not an Avro data file: shorter than the Avro magic block');
 
     if (AvroDataIO::magic() != $magic)
       throw new AvroDataIOException(
-        sprintf('Not an Avro data file: %s does not match %s',
+        \sprintf('Not an Avro data file: %s does not match %s',
                 $magic, AvroDataIO::magic()));
 
     $this->metadata = $this->datum_reader->read_data(AvroDataIO::metadata_schema(),
@@ -364,12 +364,12 @@ class AvroDataIOWriter
   private static function generate_sync_marker()
   {
     // From http://php.net/manual/en/function.mt-rand.php comments
-    return pack('S8',
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-                mt_rand(0, 0xffff),
-                mt_rand(0, 0xffff) | 0x4000,
-                mt_rand(0, 0xffff) | 0x8000,
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
+    return \pack('S8',
+                \mt_rand(0, 0xffff), \mt_rand(0, 0xffff),
+                \mt_rand(0, 0xffff),
+                \mt_rand(0, 0xffff) | 0x4000,
+                \mt_rand(0, 0xffff) | 0x8000,
+                \mt_rand(0, 0xffff), \mt_rand(0, 0xffff), \mt_rand(0, 0xffff));
   }
 
   /**
@@ -429,7 +429,7 @@ class AvroDataIOWriter
     {
       $this->sync_marker = self::generate_sync_marker();
       $this->metadata[AvroDataIO::METADATA_CODEC_ATTR] = AvroDataIO::NULL_CODEC;
-      $this->metadata[AvroDataIO::METADATA_SCHEMA_ATTR] = strval($writers_schema);
+      $this->metadata[AvroDataIO::METADATA_SCHEMA_ATTR] = \strval($writers_schema);
       $this->write_header();
     }
     else
@@ -491,15 +491,15 @@ class AvroDataIOWriter
     if ($this->block_count > 0)
     {
       $this->encoder->write_long($this->block_count);
-      $to_write = strval($this->buffer);
-      $this->encoder->write_long(strlen($to_write));
+      $to_write = \strval($this->buffer);
+      $this->encoder->write_long(\strlen($to_write));
 
       if (AvroDataIO::is_valid_codec(
             $this->metadata[AvroDataIO::METADATA_CODEC_ATTR]))
         $this->write($to_write);
       else
         throw new AvroDataIOException(
-          sprintf('codec %s is not supported',
+          \sprintf('codec %s is not supported',
                   $this->metadata[AvroDataIO::METADATA_CODEC_ATTR]));
 
       $this->write($this->sync_marker);

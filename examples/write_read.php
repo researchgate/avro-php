@@ -49,7 +49,7 @@ $data_reader = AvroDataIO::open_file($file_name);
 echo "from file:\n";
 // Read each datum
 foreach ($data_reader->data() as $datum)
-  echo var_export($datum, true) . "\n";
+  echo \var_export($datum, true) . "\n";
 $data_reader->close();
 
 // Create a data string
@@ -70,7 +70,7 @@ $read_io = new AvroStringIO($binary_string);
 $data_reader = new AvroDataIOReader($read_io, new AvroIODatumReader());
 echo "from binary string:\n";
 foreach ($data_reader->data() as $datum)
-  echo var_export($datum, true) . "\n";
+  echo \var_export($datum, true) . "\n";
 
 /** Output
 from file:

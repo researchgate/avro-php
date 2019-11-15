@@ -62,7 +62,7 @@ class AvroDebug
   static function debug($format, $args, $debug_level=self::DEBUG1)
   {
     if (self::is_debug($debug_level))
-      vprintf($format . "\n", $args);
+      \vprintf($format . "\n", $args);
     return true;
   }
 
@@ -80,7 +80,7 @@ class AvroDebug
    */
   static function hex_string($str, $joiner=' ')
   {
-    return join($joiner, self::hex_array($str));
+    return \join($joiner, self::hex_array($str));
   }
 
   /**
@@ -91,8 +91,8 @@ class AvroDebug
   static function bytes_array($str, $format='x%02x')
   {
     $x = array();
-    foreach (str_split($str) as $b)
-      $x []= sprintf($format, ord($b));
+    foreach (\str_split($str) as $b)
+      $x []= \sprintf($format, \ord($b));
     return $x;
   }
 
@@ -110,7 +110,7 @@ class AvroDebug
    */
   static function dec_string($str, $joiner = ' ')
   {
-    return join($joiner, self::dec_array($str));
+    return \join($joiner, self::dec_array($str));
   }
 
   /**
@@ -127,7 +127,7 @@ class AvroDebug
    */
   static function ascii_array($str, $format='ctrl')
   {
-    if (!in_array($format, array('ctrl', 'hex', 'dec')))
+    if (!\in_array($format, array('ctrl', 'hex', 'dec')))
       throw new AvroException('Unrecognized format specifier');
 
     $ctrl_chars = array('NUL', 'SOH', 'STX', 'ETX', 'EOT', 'ENQ', 'ACK', 'BEL',
@@ -135,21 +135,21 @@ class AvroDebug
                         'DLE', 'DC1', 'DC2', 'DC3', 'DC4', 'NAK', 'SYN', 'ETB',
                         'CAN', 'EM',  'SUB', 'ESC', 'FS',  'GS',  'RS',  'US');
     $x = array();
-    foreach (str_split($str) as $b)
+    foreach (\str_split($str) as $b)
     {
-      $db = ord($b);
+      $db = \ord($b);
       if ($db < 32)
       {
         switch ($format)
         {
           case 'ctrl':
-            $x []= str_pad($ctrl_chars[$db], 3, ' ', STR_PAD_LEFT);
+            $x []= \str_pad($ctrl_chars[$db], 3, ' ', STR_PAD_LEFT);
             break;
           case 'hex':
-            $x []= sprintf("x%02X", $db);
+            $x []= \sprintf("x%02X", $db);
             break;
           case 'dec':
-            $x []= str_pad($db, 3, '0', STR_PAD_LEFT);
+            $x []= \str_pad($db, 3, '0', STR_PAD_LEFT);
             break;
         }
       }
@@ -163,18 +163,18 @@ class AvroDebug
             $x []= 'DEL';
             break;
           case 'hex':
-            $x []= sprintf("x%02X", $db);
+            $x []= \sprintf("x%02X", $db);
             break;
           case 'dec':
-            $x []= str_pad($db, 3, '0', STR_PAD_LEFT);
+            $x []= \str_pad($db, 3, '0', STR_PAD_LEFT);
             break;
         }
       }
       else
         if ('hex' == $format)
-          $x []= sprintf("x%02X", $db);
+          $x []= \sprintf("x%02X", $db);
         else
-          $x []= str_pad($db, 3, '0', STR_PAD_LEFT);
+          $x []= \str_pad($db, 3, '0', STR_PAD_LEFT);
     }
     return $x;
   }
@@ -189,6 +189,6 @@ class AvroDebug
    */
   static function ascii_string($str, $format='ctrl', $joiner = ' ')
   {
-    return join($joiner, self::ascii_array($str, $format));
+    return \join($joiner, self::ascii_array($str, $format));
   }
 }

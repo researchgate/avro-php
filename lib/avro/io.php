@@ -170,11 +170,11 @@ class AvroStringIO extends AvroIO
     $this->string_buffer = '';
     $this->current_index = 0;
 
-    if (is_string($str))
+    if (\is_string($str))
       $this->string_buffer .= $str;
     else
       throw new AvroIOException(
-        sprintf('constructor argument must be a string: %s', gettype($str)));
+        \sprintf('constructor argument must be a string: %s', \gettype($str)));
   }
 
   /**
@@ -187,11 +187,11 @@ class AvroStringIO extends AvroIO
   public function write($arg)
   {
     $this->check_closed();
-    if (is_string($arg))
+    if (\is_string($arg))
       return $this->append_str($arg);
     throw new AvroIOException(
-      sprintf('write argument must be a string: (%s) %s',
-              gettype($arg), var_export($arg, true)));
+      \sprintf('write argument must be a string: (%s) %s',
+              \gettype($arg), \var_export($arg, true)));
   }
 
   /**
@@ -204,7 +204,7 @@ class AvroStringIO extends AvroIO
     $read='';
     for($i=$this->current_index; $i<($this->current_index+$len); $i++) 
       $read .= $this->string_buffer[$i];
-    if (strlen($read) < $len)
+    if (\strlen($read) < $len)
       $this->current_index = $this->length();
     else
       $this->current_index += $len;
@@ -217,7 +217,7 @@ class AvroStringIO extends AvroIO
    */
   public function seek($offset, $whence=self::SEEK_SET)
   {
-    if (!is_int($offset))
+    if (!\is_int($offset))
       throw new AvroIOException('Seek offset must be an integer.');
     // Prevent seeking before BOF
     switch ($whence)
@@ -238,7 +238,7 @@ class AvroStringIO extends AvroIO
         $this->current_index = $this->length() + $offset;
         break;
       default:
-        throw new AvroIOException(sprintf('Invalid seek whence %d', $whence));
+        throw new AvroIOException(\sprintf('Invalid seek whence %d', $whence));
     }
 
     return true;
@@ -294,7 +294,7 @@ class AvroStringIO extends AvroIO
   { 
     $this->check_closed(); 
     $this->string_buffer .= $str; 
-    $len = strlen($str); 
+    $len = \strlen($str); 
     $this->current_index += $len; 
     return $len; 
   } 
@@ -317,7 +317,7 @@ class AvroStringIO extends AvroIO
    * @internal Could probably memoize length for performance, but
    *           no need do this yet.
    */
-  public function length() { return strlen($this->string_buffer); }
+  public function length() { return \strlen($this->string_buffer); }
 
   /**
    * @returns string
@@ -374,18 +374,18 @@ class AvroFile extends AvroIO
     switch ($mode)
     {
       case self::WRITE_MODE:
-        $this->file_handle = fopen($this->file_path, self::FOPEN_WRITE_MODE);
+        $this->file_handle = \fopen($this->file_path, self::FOPEN_WRITE_MODE);
         if (false == $this->file_handle)
           throw new AvroIOException('Could not open file for writing');
         break;
       case self::READ_MODE:
-        $this->file_handle = fopen($this->file_path, self::FOPEN_READ_MODE);
+        $this->file_handle = \fopen($this->file_path, self::FOPEN_READ_MODE);
         if (false == $this->file_handle)
           throw new AvroIOException('Could not open file for reading');
         break;
       default:
         throw new AvroIOException(
-          sprintf("Only modes '%s' and '%s' allowed. You provided '%s'.",
+          \sprintf("Only modes '%s' and '%s' allowed. You provided '%s'.",
                   self::READ_MODE, self::WRITE_MODE, $mode));
     }
   }
@@ -396,9 +396,9 @@ class AvroFile extends AvroIO
    */
   public function write($str)
   {
-    $len = fwrite($this->file_handle, $str);
+    $len = \fwrite($this->file_handle, $str);
     if (false === $len)
-      throw new AvroIOException(sprintf('Could not write to file'));
+      throw new AvroIOException(\sprintf('Could not write to file'));
     return $len;
   }
 
@@ -411,12 +411,12 @@ class AvroFile extends AvroIO
   {
     if (0 > $len)
       throw new AvroIOException(
-        sprintf("Invalid length value passed to read: %d", $len));
+        \sprintf("Invalid length value passed to read: %d", $len));
 
     if (0 == $len)
       return '';
 
-    $bytes = fread($this->file_handle, $len);
+    $bytes = \fread($this->file_handle, $len);
     if (false === $bytes)
       throw new AvroIOException('Could not read from file');
     return $bytes;
@@ -428,7 +428,7 @@ class AvroFile extends AvroIO
    */
   public function tell()
   {
-    $position = ftell($this->file_handle);
+    $position = \ftell($this->file_handle);
     if (false === $position)
       throw new AvroIOException('Could not execute tell on reader');
     return $position;
@@ -443,11 +443,11 @@ class AvroFile extends AvroIO
    */
   public function seek($offset, $whence = SEEK_SET)
   {
-    $res = fseek($this->file_handle, $offset, $whence);
+    $res = \fseek($this->file_handle, $offset, $whence);
     // Note: does not catch seeking beyond end of file
     if (-1 === $res)
       throw new AvroIOException(
-        sprintf("Could not execute seek (offset = %d, whence = %d)",
+        \sprintf("Could not execute seek (offset = %d, whence = %d)",
                 $offset, $whence));
     return true;
   }
@@ -459,7 +459,7 @@ class AvroFile extends AvroIO
    */
   public function close()
   {
-    $res = fclose($this->file_handle);
+    $res = \fclose($this->file_handle);
     if (false === $res)
       throw new AvroIOException('Error closing file.');
     return $res;
@@ -473,7 +473,7 @@ class AvroFile extends AvroIO
   public function is_eof()
   {
     $this->read(1);
-    if (feof($this->file_handle))
+    if (\feof($this->file_handle))
       return true;
     $this->seek(-1, self::SEEK_CUR);
     return false;
@@ -485,7 +485,7 @@ class AvroFile extends AvroIO
    */
   public function flush()
   {
-    $res = fflush($this->file_handle);
+    $res = \fflush($this->file_handle);
     if (false === $res)
       throw new AvroIOException('Could not flush file.');
     return true;
