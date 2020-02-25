@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/researchgate/avro-php.svg?branch=master)](https://travis-ci.com/researchgate/avro-php)
+
 What the Avro PHP library is
 ============================
 
