@@ -1,4 +1,4 @@
-![Test status](https://github.com/researchgate/avro-php/actions/workflows/tests.yml/badge.svg)
+[![Test status](https://github.com/researchgate/avro-php/actions/workflows/tests.yml/badge.svg)](https://github.com/researchgate/avro-php/actions/workflows/tests.yml)
 
 What the Avro PHP library is
 ============================
