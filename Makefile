@@ -28,7 +28,7 @@ composer-update:
 phpunit:
 	@mkdir -p build/tmp build/share/test/schemas build/build/interop/data
 	@chmod -R a+w build
-	PHP_VERSION=$(PHP_VERSION) $(PHP) vendor/bin/phpunit --coverage-text test/AllTests.php
+	PHP_VERSION=$(PHP_VERSION) $(PHP) vendor/bin/phpunit --coverage-text
 
 run:
 	PHP_VERSION=$(PHP_VERSION) $(PHP) $(ARGS)

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/researchgate/avro-php.svg?branch=master)](https://travis-ci.com/researchgate/avro-php)
+![Test status](https://github.com/researchgate/phpnsc/actions/workflows/tests.yml/badge.svg)
 
 What the Avro PHP library is
 ============================
@@ -11,13 +11,10 @@ Requirements
  * On 32-bit platforms, the [GMP PHP extension](http://php.net/gmp)
  * For testing, [PHPUnit](http://www.phpunit.de/)
 
-Both GMP and PHPUnit are often available via package management
-systems as `php5-gmp` and `phpunit`, respectively.
-
 Getting started
 ===============
 
-Untar the avro-php distribution, untar it, and put it in your include path:
+Untar the avro-php distribution and put it in your include path:
 
     tar xjf avro-php.tar.bz2 # avro-php.tar.bz2 is likely avro-php-1.4.0.tar.bz2
     cp avro-php /path/to/where/you/want/it
