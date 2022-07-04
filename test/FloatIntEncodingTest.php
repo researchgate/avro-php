@@ -16,12 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class FloatIntEncodingTest
  */
-class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
+class FloatIntEncodingTest extends TestCase
 {
   const FLOAT_TYPE = 'float';
   const DOUBLE_TYPE = 'double';
@@ -57,12 +59,12 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
     self::$INT_BITS_NEG_INF  = strrev(pack('H*', 'ff800000'));
   }
 
-  function setUp()
+  public function setUp(): void
   {
     self::make_special_vals();
   }
 
-  function test_special_values()
+  public function test_special_values()
   {
     $this->assertTrue(is_float(self::$FLOAT_NAN), 'float NaN is a float');
     $this->assertTrue(is_nan(self::$FLOAT_NAN), 'float NaN is NaN');
@@ -97,7 +99,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  function special_vals_provider()
+  public function special_vals_provider()
   {
     self::make_special_vals();
     return array(array(self::DOUBLE_TYPE, self::$DOUBLE_POS_INF, self::$LONG_BITS_POS_INF),
@@ -112,7 +114,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function test_encoding_special_values($type, $val, $bits)
+  public function test_encoding_special_values($type, $val, $bits)
   {
     $this->assert_encode_values($type, $val, $bits);
   }
@@ -120,7 +122,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  function nan_vals_provider()
+  public function nan_vals_provider()
   {
     self::make_special_vals();
     return array(array(self::DOUBLE_TYPE, self::$DOUBLE_NAN, self::$LONG_BITS_NAN),
@@ -133,7 +135,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function test_encoding_nan_values($type, $val, $bits)
+  public function test_encoding_nan_values($type, $val, $bits)
   {
     $this->assert_encode_nan_values($type, $val, $bits);
   }
@@ -141,7 +143,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  function normal_vals_provider()
+  public function normal_vals_provider()
   {
     return array(
                  array(self::DOUBLE_TYPE, (double) -10, "\000\000\000\000\000\000$\300", '000000000000420c'),
@@ -197,7 +199,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  function float_vals_provider()
+  public function float_vals_provider()
   {
     $ary = array();
 
@@ -211,7 +213,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  function double_vals_provider()
+  public function double_vals_provider()
   {
     $ary = array();
 
@@ -229,7 +231,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function test_encoding_float_values($type, $val, $bits)
+  public function test_encoding_float_values($type, $val, $bits)
   {
     $this->assert_encode_values($type, $val, $bits);
   }
@@ -240,7 +242,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function test_encoding_double_values($type, $val, $bits)
+  public function test_encoding_double_values($type, $val, $bits)
   {
     $this->assert_encode_values($type, $val, $bits);
   }
@@ -250,7 +252,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function assert_encode_values($type, $val, $bits)
+  public function assert_encode_values($type, $val, $bits)
   {
     if (self::FLOAT_TYPE == $type)
     {
@@ -286,7 +288,7 @@ class FloatIntEncodingTest extends PHPUnit_Framework_TestCase
    * @param $val
    * @param $bits
    */
-  function assert_encode_nan_values($type, $val, $bits)
+  public function assert_encode_nan_values($type, $val, $bits)
   {
     if (self::FLOAT_TYPE == $type)
     {

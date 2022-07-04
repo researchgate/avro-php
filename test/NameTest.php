@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
@@ -60,7 +62,7 @@ class NameExample
 /**
  * Class NameTest
  */
-class NameTest extends PHPUnit_Framework_TestCase
+class NameTest extends TestCase
 {
 
   /**
@@ -128,6 +130,6 @@ class NameTest extends PHPUnit_Framework_TestCase
    */
   function test_name($name, $is_well_formed)
   {
-    $this->assertEquals(AvroName::is_well_formed_name($name), $is_well_formed, $name);
+    $this->assertEquals(AvroName::is_well_formed_name($name), $is_well_formed);
   }
 }

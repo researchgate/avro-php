@@ -17,17 +17,16 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 // near-verbatim port of test_protocol.py
 /**
  * Class ProtocolFileTest
  */
-class ProtocolFileTest extends PHPUnit_Framework_TestCase
+class ProtocolFileTest extends TestCase
 {
-  protected function setUp() {
-  }
-
   public function testParsing() {
     $cnt=count($this->prot_parseable);
     for ($i=0; $i<$cnt; $i++) {

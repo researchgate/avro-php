@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class DatumIOTest
  */
-class DatumIOTest extends PHPUnit_Framework_TestCase
+class DatumIOTest extends TestCase
 {
   /**
    * @dataProvider data_provider

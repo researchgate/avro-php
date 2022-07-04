@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
@@ -53,7 +55,7 @@ class SchemaExample
 /**
  * Class SchemaTest
  */
-class SchemaTest extends PHPUnit_Framework_TestCase
+class SchemaTest extends TestCase
 {
   static $examples = array();
   static $valid_examples = array();

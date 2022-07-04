@@ -4,10 +4,10 @@ MAKEFLAGS =+ -rR --warn-undefined-variables
 .PHONY: composer-install composer-update examples docker run
 
 COMPOSER ?= bin/composer.phar
-COMPOSER_VERSION ?= 1.8.3
+COMPOSER_VERSION ?= 2.3.8
 PHP ?= bin/php
-PHP_VERSION ?= 7.2
-XDEBUG_VERSION ?= 2.7.0RC1
+PHP_VERSION ?= 8.0
+XDEBUG_VERSION ?= 3.1.5
 
 export
 

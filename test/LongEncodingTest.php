@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class LongEncodingTest
  */
-class LongEncodingTest extends PHPUnit_Framework_TestCase
+class LongEncodingTest extends TestCase
 {
 
-  function setUp()
+  protected function setUp(): void
   {
     Avro::check_platform();
   }

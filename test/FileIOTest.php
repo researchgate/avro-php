@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Tests against a preexisting file created by a different library
  */
-class FileIOTest extends PHPUnit_Framework_TestCase
+class FileIOTest extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $file = $this->getTmpFile();
         if (file_exists($file))
