@@ -32,6 +32,16 @@ define('AVRO_BUILD_DATA_DIR', implode(DIRECTORY_SEPARATOR, array(AVRO_BUILD_DIR,
 define('AVRO_TEST_SCHEMAS_DIR', implode(DIRECTORY_SEPARATOR, array(AVRO_SHARE_DIR, 'test', 'schemas')));
 define('AVRO_INTEROP_SCHEMA', implode(DIRECTORY_SEPARATOR, array(AVRO_TEST_SCHEMAS_DIR, 'interop.avsc')));
 
+if (!file_exists(TEST_TEMP_DIR)) {
+    mkdir(TEST_TEMP_DIR, 0777, true);
+}
+if (!file_exists(AVRO_TEST_SCHEMAS_DIR)) {
+    mkdir(AVRO_TEST_SCHEMAS_DIR, 0777, true);
+}
+if (!file_exists(AVRO_BUILD_DATA_DIR)) {
+    mkdir(AVRO_BUILD_DATA_DIR, 0777, true);
+}
+
 $tz = ini_get('date.timezone');
 if (empty($tz)) {
     date_default_timezone_set('UTC');
