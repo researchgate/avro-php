@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class IODatumReaderTest
  */
-class IODatumReaderTest extends PHPUnit_Framework_TestCase
+class IODatumReaderTest extends TestCase
 {
 
   public function testSchemaMatching()

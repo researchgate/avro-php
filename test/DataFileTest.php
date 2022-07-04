@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class DataFileTest
  */
-class DataFileTest extends PHPUnit_Framework_TestCase
+class DataFileTest extends TestCase
 {
   private $data_files;
   const REMOVE_DATA_FILES = true;
@@ -62,13 +64,13 @@ class DataFileTest extends PHPUnit_Framework_TestCase
         $this->remove_data_file($data_file);
   }
 
-  protected function setUp()
+  protected function setUp(): void
   {
     if (!file_exists(TEST_TEMP_DIR))
       mkdir(TEST_TEMP_DIR);
     $this->remove_data_files();
   }
-  protected function tearDown()
+  protected function tearDown(): void
   {
     $this->remove_data_files();
   }

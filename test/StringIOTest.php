@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once('test_helper.php');
 
 /**
  * Class StringIOTest
  */
-class StringIOTest extends PHPUnit_Framework_TestCase
+class StringIOTest extends TestCase
 {
 
   public function test_write()
