@@ -1161,7 +1161,7 @@ class AvroEnumSchema extends AvroNamedSchema
     foreach ($symbols as $symbol)
       if (!is_string($symbol) || empty($symbol))
         throw new AvroSchemaParseException(
-          sprintf('Enum schema symbol must be a string %',
+          sprintf('Enum schema symbol must be a string %s',
                   print_r($symbol, true)));
 
     parent::__construct(AvroSchema::ENUM_SCHEMA, $name, $doc, $schemata, $logical_type, $extra_attributes);
