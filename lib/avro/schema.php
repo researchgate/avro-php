@@ -248,6 +248,21 @@ class AvroSchema
                                       self::RECORD_SCHEMA, self::ERROR_SCHEMA);
 
   /**
+   * @var string a schema type name
+   */
+  public $type;
+  
+  /**
+   * @var string a schema logical type name
+   */
+  public $logical_type;
+  
+  /**
+   * @var array $extra_attributes extra attributes defined on the schema
+   */
+  public $extra_attributes;
+  
+  /**
    * @param string $type a schema type name
    * @return boolean true if the given type name is a named schema type name
    *                  and false otherwise.
@@ -478,7 +493,6 @@ class AvroSchema
    *           a class which extends AvroSchema
    * @param string $type a schema type name
    * @param string $logical_type a schema logical type name
-   * @param array $extra_attributes extra attributes defined on the schema
    * @param array $extra_attributes extra attributes defined on the schema
    */
   public function __construct($type, $logical_type=null,$extra_attributes=array())
@@ -1247,7 +1261,7 @@ class AvroFixedSchema extends AvroNamedSchema
       throw new AvroSchemaParseException(
         'Fixed Schema requires a valid integer for "size" attribute');
     parent::__construct(AvroSchema::FIXED_SCHEMA, $name, $doc, $schemata, $logical_type, $extra_attributes);
-    return $this->size = $size;
+    $this->size = $size;
   }
 
   /**

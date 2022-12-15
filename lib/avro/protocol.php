@@ -30,6 +30,8 @@ class AvroProtocol
   public $name;
   public $namespace;
   public $schemata;
+  public $protocol;
+  public $messages;
 
   /**
    * @param $json
@@ -81,6 +83,8 @@ class AvroProtocolMessage
   public $request;
 
   public $response;
+
+  public $name;
 
   /**
    * AvroProtocolMessage constructor.

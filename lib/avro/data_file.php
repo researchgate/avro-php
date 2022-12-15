@@ -415,6 +415,11 @@ class AvroDataIOWriter
   private $metadata;
 
   /**
+   * @var mixed a unique sync marker
+   */
+  private $sync_marker;
+
+  /**
    * @param AvroIO $io
    * @param AvroIODatumWriter $datum_writer
    * @param AvroSchema $writers_schema
