@@ -57,7 +57,7 @@ class AvroSchemaParseException extends AvroException {};
 /**
  * @package Avro
  */
-class AvroSchema
+class AvroSchema extends \stdCLass
 {
   /**
    * @var int lower bound of integer values: -(1 << 31)
@@ -905,7 +905,7 @@ class AvroNamedSchema extends AvroSchema
 /**
  * @package Avro
  */
-class AvroName
+class AvroName extends \stdCLass
 {
   /**
    * @var string character used to separate names comprising the fullname
@@ -1055,7 +1055,7 @@ class AvroName
  *
  * @package Avro
  */
-class AvroNamedSchemata
+class AvroNamedSchemata extends \stdCLass
 {
   /**
    * @var AvroNamedSchema[]
