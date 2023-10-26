@@ -1,5 +1,7 @@
 [![Test status](https://github.com/researchgate/avro-php/actions/workflows/tests.yml/badge.svg)](https://github.com/researchgate/avro-php/actions/workflows/tests.yml)
 
+This library is abandoned. Please use [flix-tech/avro-php](https://github.com/flix-tech/avro-php) instead.
+
 What the Avro PHP library is
 ============================
 

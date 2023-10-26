@@ -2,6 +2,7 @@
     "name": "rg/avro-php",
     "description": "Composer packaging for vanilla Apache Avro, with fixes",
     "license": "Apache-2.0",
+    "abandoned": "flix-tech/avro-php",
     "require": {
         "php": ">=7.3"
     },
